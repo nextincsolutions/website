@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Solutions | Performance M4 & IA Avançada</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --apple-bg: #ffffff;
+            --apple-text: #1d1d1f;
+            --apple-secondary-text: #86868b;
+            --apple-blue: #0071e3;
+            --m4-light-gradient: linear-gradient(135deg, #0071e3 0%, #5e5ce6 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--apple-bg);
+            color: var(--apple-text);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 100;
+        }
+
+        /* Efeito de Rede Neural no Fundo */
+        #neural-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.7; /* Opacidade aumentada para maior visibilidade */
+            pointer-events: none;
+        }
+
+        .hero-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .text-gradient-apple {
+            background: linear-gradient(180deg, #1d1d1f 60%, #86868b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .m4-chip-text {
+            background: var(--m4-light-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .section-padding {
+            padding: 120px 24px;
+        }
+
+        .apple-card-light {
+            background: #f5f5f7;
+            border-radius: 32px;
+            padding: 40px;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .apple-card-light:hover {
+            transform: scale(1.01);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+        }
+
+        /* Animações de Entrada */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tech-pill {
+            background: rgba(0,0,0,0.04);
+            border: 1px solid rgba(0,0,0,0.08);
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 13px;
+            font-weight: 500;
+            display: inline-block;
+            margin: 4px;
+            color: #424245;
+        }
+
+        .chip-visual-light {
+            width: 140px;
+            height: 140px;
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1px solid #d2d2d7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .chip-visual-light::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 26px;
+            background: var(--m4-light-gradient);
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .xcode-mockup {
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            overflow: hidden;
+            margin-top: 24px;
+        }
+        .xcode-header {
+            background: #f1f1f1;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            gap: 4px;
+        }
+        .dot { width: 8px; height: 8px; border-radius: 50%; }
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
+
+        .btn-primary {
+            background-color: #1d1d1f;
+            color: white;
+            padding: 14px 32px;
+            border-radius: 980px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .client-logo {
+            filter: grayscale(100%);
+            opacity: 0.6;
+            transition: all 0.3s;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: #1d1d1f;
+        }
+
+        .client-logo:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navegação -->
+    <nav class="glass-nav fixed top-0 w-full h-12 flex items-center justify-center">
+        <div class="max-w-[1024px] w-full px-6 flex justify-between items-center text-[12px] font-medium tracking-tight text-gray-500">
+            <div class="text-black text-lg font-bold tracking-tighter">Next Solutions</div>
+            <div class="hidden md:flex space-x-10">
+                <a href="#home" class="hover:text-black transition">Início</a>
+                <a href="#experiencia" class="hover:text-black transition">Experiência</a>
+                <a href="#m4" class="hover:text-black transition">Tecnologia</a>
+                <a href="#software" class="hover:text-black transition">Software</a>
+            </div>
+            <a href="https://dashboard.nsxt.com.br" class="bg-black text-white px-3 py-1 rounded-full text-[10px]">Painel do cliente</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section com Efeito Neural -->
+    <section id="home" class="min-h-screen flex flex-col items-center justify-center text-center px-6 overflow-hidden relative">
+        <canvas id="neural-canvas"></canvas>
+        
+        <div class="hero-container">
+            <h2 class="text-lg md:text-xl font-semibold mb-3 text-[#0071e3] opacity-0 fade-in-up">Apple ACMT desde 2011</h2>
+            <h1 class="text-6xl md:text-8xl font-bold tracking-tight text-gradient-apple mb-8 opacity-0 fade-in-up delay-1">Next Solutions</h1>
+            <p class="text-xl md:text-2xl text-gray-500 max-w-2xl mx-auto leading-relaxed font-light opacity-0 fade-in-up delay-2">
+                14 anos a desenvolver software de elite e a treinar modelos LLM e VLM otimizados para o silício da Apple.
+            </p>
+            <div class="mt-12 flex flex-col md:flex-row items-center justify-center gap-6 opacity-0 fade-in-up delay-3">
+                <a href="#experiencia" class="btn-primary">Nossa Trajetória</a>
+                <a href="#contato" class="text-[#0071e3] text-lg font-medium hover:underline flex items-center">
+                    Consultar um especialista <span class="ml-1">></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experiência e Clientes -->
+    <section id="experiencia" class="section-padding bg-white relative z-10">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <h2 class="text-[#86868b] font-semibold text-sm uppercase tracking-[0.2em] mb-4">Legado e Confiança</h2>
+                    <h3 class="text-4xl md:text-6xl font-bold tracking-tight mb-8">14 anos na vanguarda da tecnologia Apple.</h3>
+                    <p class="text-gray-500 text-lg leading-relaxed mb-8 font-light">
+                        Somos especialistas certificados <strong>Apple ACMT desde 2011</strong>. A nossa jornada é marcada pela entrega de soluções complexas para líderes globais, unindo o rigor da engenharia de hardware com a inovação em software e IA.
+                    </p>
+                </div>
+                <div class="reveal grid grid-cols-2 gap-8 items-center text-center">
+                    <div class="client-logo">Petrobras</div>
+                    <div class="client-logo">Rio 2016</div>
+                    <div class="client-logo">Apple</div>
+                    <div class="client-logo">SpaceX</div>
+                    <div class="client-logo">CapturaME</div>
+                    <div class="client-logo">CatchBank</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- M4 & MLX -->
+    <section id="m4" class="section-padding bg-[#f5f5f7] relative z-10">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-20 items-center">
+                <div class="reveal">
+                    <div class="chip-visual-light mb-12">
+                        <span class="m4-chip-text text-5xl">M4</span>
+                    </div>
+                    <h2 class="text-4xl md:text-6xl font-bold tracking-tight mb-8">Eficiência M4.<br>Inferência via MLX.</h2>
+                    <p class="text-gray-500 text-lg leading-relaxed mb-10">
+                        Os nossos modelos são otimizados para correr localmente. Usamos o framework <strong>MLX</strong> para extrair performance máxima do Neural Engine, garantindo privacidade e velocidade instantânea.
+                    </p>
+                </div>
+                <div class="reveal apple-card-light bg-white shadow-xl shadow-gray-200/50">
+                    <div class="space-y-6 text-center">
+                        <div class="flex justify-center mb-4">
+                            <svg width="120" height="60" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="10" y="5" width="100" height="45" rx="8" fill="#E5E5E7" stroke="#D2D2D7" stroke-width="2"/>
+                                <rect x="20" y="35" width="80" height="4" rx="2" fill="#D2D2D7"/>
+                                <circle cx="60" cy="22" r="8" fill="#D2D2D7" fill-opacity="0.5"/>
+                            </svg>
+                        </div>
+                        <p class="text-xs font-mono text-gray-400">HARDWARE VALIDATED: MAC STUDIO M4 ULTRA</p>
+                        <div class="bg-gray-50 p-4 rounded-xl text-left">
+                            <code class="text-[11px] text-gray-600">
+                                $ mlx_train --model next-vlm-v1 --device m4<br>
+                                [INFO] Unified Memory: 128GB utilized<br>
+                                [INFO] Neural Engine: Active
+                            </code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Arquitetura de Elite com Xcode/Equipamentos -->
+    <section id="software" class="section-padding bg-white relative z-10">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="text-center mb-24 reveal">
+                <h2 class="text-5xl md:text-7xl font-bold tracking-tight mb-6">Arquitetura de Elite.</h2>
+                <p class="text-xl text-gray-400 font-light">Equipamentos de ponta e desenvolvimento nativo.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1: Apple Native / Xcode -->
+                <div class="apple-card-light reveal flex flex-col">
+                    <div class="flex-grow">
+                        <h3 class="text-2xl font-semibold mb-4">Apple Native</h3>
+                        <p class="text-gray-500 leading-relaxed text-sm mb-6">Engenharia Swift com a precisão de quem domina o Xcode e as APIs oficiais da Apple desde 2011.</p>
+                    </div>
+                    <div class="xcode-mockup">
+                        <div class="xcode-header">
+                            <div class="dot red"></div>
+                            <div class="dot yellow"></div>
+                            <div class="dot green"></div>
+                            <div class="ml-4 text-[9px] text-gray-400 font-mono">ContentView.swift — NextApp</div>
+                        </div>
+                        <div class="p-4 font-mono text-[10px] text-gray-400 bg-white">
+                            <span class="text-blue-500">struct</span> NextApp: View {<br>
+                            &nbsp;&nbsp;<span class="text-purple-500">var</span> body: some View {<br>
+                            &nbsp;&nbsp;&nbsp;&nbsp;VStack { ... }<br>
+                            &nbsp;&nbsp;}<br>
+                            }
+                        </div>
+                    </div>
+                    <div class="mt-6 flex flex-wrap">
+                        <span class="tech-pill">Xcode 16</span>
+                        <span class="tech-pill">SwiftUI</span>
+                        <span class="tech-pill">Combine</span>
+                    </div>
+                </div>
+
+                <!-- Card 2: Hardware & ACMT -->
+                <div class="apple-card-light reveal flex flex-col">
+                    <div class="flex-grow text-center">
+                        <div class="mb-6 flex justify-center">
+                            <svg width="140" height="90" viewBox="0 0 140 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="25" y="10" width="90" height="55" rx="4" fill="#1D1D1F"/>
+                                <rect x="28" y="13" width="84" height="49" rx="2" fill="#000"/>
+                                <path d="M10 65H130C130 65 130 78 120 78H20C10 78 10 65 10 65Z" fill="#D2D2D7"/>
+                                <rect x="60" y="65" width="20" height="2" fill="#86868B"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">Hardware Integrado</h3>
+                        <p class="text-gray-500 leading-relaxed text-sm">Somos especialistas em integrar software diretamente ao hardware Apple, otimizando sensores e performance.</p>
+                    </div>
+                    <div class="mt-6 flex flex-wrap justify-center">
+                        <span class="tech-pill">MacBook Pro M4</span>
+                        <span class="tech-pill">Mac Studio</span>
+                        <span class="tech-pill">Apple Vision Pro</span>
+                    </div>
+                </div>
+
+                <!-- Card 3: Backend & Enterprise -->
+                <div class="apple-card-light reveal flex flex-col">
+                    <div class="flex-grow">
+                        <h3 class="text-2xl font-semibold mb-4">Enterprise Systems</h3>
+                        <p class="text-gray-500 leading-relaxed text-sm mb-6">Soluções robustas de backend testadas em ambientes críticos como os da SpaceX e Petrobras.</p>
+                    </div>
+                    <div class="bg-gray-200 rounded-xl p-4 h-24 flex items-center justify-center">
+                        <div class="grid grid-cols-4 gap-2">
+                            <div class="w-4 h-4 bg-green-500 rounded-full animate-pulse"></div>
+                            <div class="w-4 h-4 bg-green-500 rounded-full animate-pulse delay-75"></div>
+                            <div class="w-4 h-4 bg-green-500 rounded-full animate-pulse delay-150"></div>
+                            <div class="w-4 h-4 bg-gray-400 rounded-full"></div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex flex-wrap">
+                        <span class="tech-pill">Rust</span>
+                        <span class="tech-pill">Laravel</span>
+                        <span class="tech-pill">Node.js</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section id="contato" class="section-padding bg-[#f5f5f7] relative z-10">
+        <div class="max-w-4xl mx-auto text-center reveal">
+            <h2 class="text-5xl md:text-8xl font-bold mb-14 tracking-tight">O próximo nível.</h2>
+            <p class="text-2xl text-gray-400 mb-12 font-light">Traga o seu projeto para quem domina o ecossistema Apple.</p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="#" class="btn-primary text-lg px-16">Iniciar Projeto</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 border-t border-gray-100 text-[12px] text-gray-400 px-6 bg-white relative z-10">
+        <div class="max-w-[1024px] mx-auto">
+            <div class="grid md:grid-cols-4 gap-8 mb-12">
+                <div class="col-span-2">
+                    <p class="font-bold text-gray-900 mb-2">Next Solutions</p>
+                    <p class="max-w-xs">Apple ACMT desde 2011. Especialistas em desenvolvimento nativo e IA multimodal.</p>
+                </div>
+                <div>
+                    <p class="font-bold text-gray-900 mb-2">Equipamentos</p>
+                    <ul class="space-y-1">
+                        <li>M4 Infrastructure</li>
+                        <li>Xcode 16 Labs</li>
+                        <li>Apple Certified Shop</li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="font-bold text-gray-900 mb-2">Empresa</p>
+                    <ul class="space-y-1">
+                        <li>SpaceX Projects</li>
+                        <li>Petrobras Cases</li>
+                        <li>Legal</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-100 pt-8">
+                <p>Copyright © 2024 Next Solutions. M4, Swift, Xcode e Apple são marcas registadas.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animação da Rede Neural
+        const canvas = document.getElementById('neural-canvas');
+        const ctx = canvas.getContext('2d');
+        let points = [];
+        const maxPoints = 90; // Aumentado de 60 para 90 para maior densidade
+        const maxDistance = 180; // Aumentado de 150 para 180 para mais conexões
+        let mouse = { x: null, y: null };
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            points = [];
+            for (let i = 0; i < maxPoints; i++) {
+                points.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.7, // Velocidade levemente aumentada
+                    vy: (Math.random() - 0.5) * 0.7,
+                    r: Math.random() * 2 + 1 // Tamanho variável para os nós
+                });
+            }
+        }
+
+        function drawNeural() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < points.length; i++) {
+                let p = points[i];
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                // Desenhar nó
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 113, 227, 0.5)'; // Opacidade aumentada
+                ctx.fill();
+
+                // Conexões entre pontos
+                for (let j = i + 1; j < points.length; j++) {
+                    let p2 = points[j];
+                    let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    
+                    if (dist < maxDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        // Alpha aumentado para tornar as linhas mais visíveis
+                        let alpha = (1 - dist / maxDistance) * 0.4; 
+                        ctx.lineWidth = alpha * 2; // Espessura proporcional à proximidade
+                        ctx.strokeStyle = `rgba(0, 113, 227, ${alpha})`;
+                        ctx.stroke();
+                    }
+                }
+
+                // Interação dinâmica com o Rato
+                if (mouse.x) {
+                    let mDist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+                    if (mDist < 250) { // Raio de interação aumentado
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        let mAlpha = (1 - mDist / 250) * 0.3;
+                        ctx.lineWidth = mAlpha * 3;
+                        ctx.strokeStyle = `rgba(0, 113, 227, ${mAlpha})`;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(drawNeural);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener('resize', initCanvas);
+        
+        // Iniciar
+        initCanvas();
+        drawNeural();
+
+        // Reveal on Scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
